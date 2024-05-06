@@ -6,6 +6,7 @@ namespace Player
     public class DrivingState : State
     {
 
+        float snapDelay;
 
         // constructor
         public DrivingState(PlayerScript player, StateMachine sm) : base(player, sm)
@@ -15,7 +16,7 @@ namespace Player
         public override void Enter()
         {
             base.Enter();
-            //player.anim.SetBool("Drive", true);
+            player.anim.SetBool("Drive", true);
 
             player.rb.isKinematic = true;
             //player.transform.parent = player.vehicle.transform;
@@ -25,6 +26,7 @@ namespace Player
             player.collider1.enabled = false;
             player.transform.rotation = player.vehicle.transform.rotation;
 
+            snapDelay = 2.2f;
 
 
 
@@ -46,8 +48,21 @@ namespace Player
         {
             base.LogicUpdate();
 
-            // might be able to fix glitch with a lateupdate method is SM
-            player.transform.position = player.vehicle.transform.position + new Vector3(0, 0.3f, 0.25f);
+            
+        }
+
+        public override void LateUpdate()
+        {
+            if (snapDelay < 0)
+            {
+                player.transform.position = player.vehicle.transform.position + new Vector3(0, 0.3f, 0.25f);
+            }
+            else
+            {
+                snapDelay -= Time.deltaTime;
+            }
+
+
 
         }
 

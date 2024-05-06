@@ -66,6 +66,12 @@ namespace Player
 
         }
 
+        public void LateUpdate()
+        {
+
+            sm.CurrentState.LateUpdate();
+        }
+
         void FixedUpdate()
         {
             sm.CurrentState.PhysicsUpdate();
