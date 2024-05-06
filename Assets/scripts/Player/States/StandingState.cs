@@ -30,10 +30,9 @@ namespace Player
         {
             base.LogicUpdate();
 
-            if( player.ReadSpaceBar() == true )
+            if (player.CheckForMovement() == true)
             {
-                //sm.ChangeState(player.jumpingState);  
-                Debug.Log("changed to jumping state");
+                sm.ChangeState(player.walkingState);
             }
 
         }

@@ -8,6 +8,9 @@ namespace Player
         public State CurrentState { get; private set; }
         public State LastState { get; private set; }
 
+        public float delay;
+        public State nextState;
+
         public void Init(State startingState)
         {
             CurrentState = startingState;
@@ -23,8 +26,13 @@ namespace Player
             LastState = CurrentState;
             CurrentState = newState;
             newState.Enter();
+        }
 
-            
+        public void ChangeState( State newState, State nextState, float delay )
+        {
+            ChangeState(newState);
+            this.delay = delay;
+            this.nextState = nextState;
         }
 
         public State GetState()
