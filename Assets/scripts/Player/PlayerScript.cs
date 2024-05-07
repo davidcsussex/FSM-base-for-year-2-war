@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.VFX;
+using UnityEngine.InputSystem;
 
 namespace Player
 {
@@ -29,11 +30,12 @@ namespace Player
         public DelayState delayState;
 
         bool isGrounded;
-        bool isTouchingVehicle;
+        public bool isTouchingVehicle;
 
         public GameObject vehicle;
 
         public float moveSpeed = 100;
+        public float drivingForce = 4000;
 
 
         // Start is called before the first frame update
@@ -63,6 +65,14 @@ namespace Player
         {
             sm.CurrentState.HandleInput();
             sm.CurrentState.LogicUpdate();
+
+
+            Debug.Log(Gamepad.current.leftStick.x.ReadValue());
+            Debug.Log(Gamepad.current.leftStick.y.ReadValue());
+
+            Debug.Log(Gamepad.current.rightStick.x.ReadValue());
+            Debug.Log(Gamepad.current.rightStick.y.ReadValue());
+
 
         }
 
@@ -107,6 +117,11 @@ namespace Player
         private void OnGUI()
         {
             string text = "Current state = " + sm.GetState();
+
+            if( sm.GetState() == drivingState )
+            {
+                text += "\nPress E to exit vehicle";
+            }
 
 
             GUILayout.BeginArea(new Rect(10f, 10f, 1600f, 1600f));
