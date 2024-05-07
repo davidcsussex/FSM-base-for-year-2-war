@@ -65,15 +65,6 @@ namespace Player
         {
             sm.CurrentState.HandleInput();
             sm.CurrentState.LogicUpdate();
-
-
-            Debug.Log(Gamepad.current.leftStick.x.ReadValue());
-            Debug.Log(Gamepad.current.leftStick.y.ReadValue());
-
-            Debug.Log(Gamepad.current.rightStick.x.ReadValue());
-            Debug.Log(Gamepad.current.rightStick.y.ReadValue());
-
-
         }
 
         public void LateUpdate()
