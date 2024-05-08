@@ -83,10 +83,10 @@ namespace Player
             float rotation = Input.GetAxis("Horizontal") * 100f;
 
             rotation *= Time.deltaTime;
-            player.vehicle.transform.Rotate(0, rotation, 0);
+            //player.vehicle.transform.Rotate(0, rotation, 0);
 
             float vel = Input.GetAxis("Vertical") * player.drivingForce;
-            player.vehicle.GetComponent<Rigidbody>().AddForce(player.vehicle.transform.forward * vel);
+            //player.vehicle.GetComponent<Rigidbody>().AddForce(player.vehicle.transform.forward * vel);
         }
 
         void CheckExitVehicle()
@@ -101,6 +101,7 @@ namespace Player
                 player.rb.useGravity = true;
                 player.collider1.enabled = true;
                 player.isTouchingVehicle = false;
+                player.vehicle.GetComponent<MoveSteerVehicle>().drivable = false;
 
             }
         }

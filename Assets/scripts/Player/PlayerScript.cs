@@ -20,7 +20,7 @@ namespace Player
         [HideInInspector]
         public Animator anim;
 
-        public BoxCollider collider1;
+        public CapsuleCollider collider1;
 
         // Add your variables holding the different player states here
         public StandingState standingState;
@@ -51,6 +51,8 @@ namespace Player
             delayState = new DelayState(this, sm);
             walkingState = new WalkingState(this, sm);
             drivingState = new DrivingState(this, sm);
+
+            collider1 = GetComponent<CapsuleCollider>();
 
             // initialise the statemachine with the default state
             sm.Init(standingState);
@@ -149,6 +151,7 @@ namespace Player
             {
                 isTouchingVehicle = true;
                 vehicle = collision.gameObject;
+                vehicle.GetComponent<MoveSteerVehicle>().drivable = true;
                 
 
             }
