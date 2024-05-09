@@ -4,6 +4,8 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.VFX;
 using UnityEngine.InputSystem;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
 
 namespace Player
 {
@@ -20,6 +22,10 @@ namespace Player
         [HideInInspector]
         public Animator anim;
 
+        [HideInInspector]
+        public GameObject vehicle;
+
+
         public CapsuleCollider collider1;
 
         // Add your variables holding the different player states here
@@ -32,7 +38,6 @@ namespace Player
         bool isGrounded;
         public bool isTouchingVehicle;
 
-        public GameObject vehicle;
 
         public float moveSpeed = 100;
         public float drivingForce = 4000;
@@ -154,6 +159,15 @@ namespace Player
                 vehicle.GetComponent<MoveSteerVehicle>().drivable = true;
                 
 
+            }
+        }
+
+        public void CheckForDeath()
+        {
+            if( transform.position.y < -100 )
+            {
+                string currentSceneName = SceneManager.GetActiveScene().name;
+                SceneManager.LoadScene( currentSceneName );
             }
         }
     }

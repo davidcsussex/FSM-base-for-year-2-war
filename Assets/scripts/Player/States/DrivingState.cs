@@ -73,7 +73,7 @@ namespace Player
 
 
             //snap player to driving position
-            player.transform.localPosition = new Vector3(-0.3f, 0.3f, 0.25f);
+            player.transform.localPosition = player.vehicle.GetComponent<MoveSteerVehicle>().playerDrivingOffset;// new Vector3(-0.3f, 0.3f, 0.25f);
             //player.transform.position = player.drivingPosition;
 
         }

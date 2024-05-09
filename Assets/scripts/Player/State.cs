@@ -29,6 +29,7 @@ namespace Player
 
         public virtual void LogicUpdate()
         {
+            player.CheckForDeath();
         }
 
         public virtual void LateUpdate()
