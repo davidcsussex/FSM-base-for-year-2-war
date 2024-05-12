@@ -1,5 +1,7 @@
 
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
+using UnityEngine.InputSystem.XR;
 namespace Player
 {
     public class WalkingState : State
@@ -7,6 +9,11 @@ namespace Player
 
         Vector3 mov;
         
+        
+        float currentAngle;
+        float currentAngleVelocity;
+        
+
 
         // constructor
         public WalkingState(PlayerScript player, StateMachine sm) : base(player, sm)
@@ -49,13 +56,15 @@ namespace Player
                 sm.ChangeState(player.drivingState);
             }
 
+            DoRun();
+
 
         }
 
 
         void DoRun()
         {
-
+            /*
             player.rb.AddForce(mov * player.moveSpeed);
             player.rb.velocity = Vector3.ClampMagnitude(player.rb.velocity, 1.5f);
 
@@ -66,6 +75,22 @@ namespace Player
             player.transform.rotation = Quaternion.Slerp(player.transform.rotation, Quaternion.Euler(newRotation), Time.fixedDeltaTime * 10);
 
             //sm.transform.rotation = Quaternion.LookRotation( mov );
+            */
+
+            //capturing Input from Player
+
+            float hMov = Input.GetAxisRaw("Horizontal");
+            Debug.Log("hm=" + hMov);
+
+            Vector3 movement = new Vector3(hMov, 0, Input.GetAxisRaw("Vertical")).normalized;
+            if (movement.magnitude >= 0.1f)
+            {
+                float targetAngle = Mathf.Atan2(movement.x, movement.z) * Mathf.Rad2Deg + player.cam.transform.eulerAngles.y;
+                currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, player.rotationSmoothTime);
+                player.transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+                Vector3 rotatedMovement = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward * 0.2f;
+                player.cc.Move(rotatedMovement * player.walkSpeed * Time.deltaTime);
+            }
 
         }
 
@@ -73,7 +98,7 @@ namespace Player
         {
             base.PhysicsUpdate();
 
-            DoRun();
+            
             Debug.Log("doing run");
         }
     }

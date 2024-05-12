@@ -41,6 +41,11 @@ namespace Player
 
         public float moveSpeed = 100;
         public float drivingForce = 4000;
+        public float walkSpeed = 10f;
+
+        public Camera cam;
+        public CharacterController cc;
+        public float rotationSmoothTime;
 
 
         // Start is called before the first frame update
@@ -49,6 +54,8 @@ namespace Player
             sm = gameObject.AddComponent<StateMachine>();
             rb = GetComponent<Rigidbody>();
             anim = GetComponent<Animator>();
+            cc = GetComponent<CharacterController>();
+
 
             // set up the variables for your new states here
             standingState = new StandingState(this, sm);
@@ -119,6 +126,7 @@ namespace Player
             if( sm.GetState() == drivingState )
             {
                 text += "\nPress E to exit vehicle";
+                text += "\nPress R to reset rotation";
             }
 
 
@@ -150,13 +158,16 @@ namespace Player
             return isTouchingVehicle;
         }
 
-        private void OnCollisionEnter(Collision collision)
+
+        
+        private void OnControllerColliderHit( ControllerColliderHit hit )
         {
-            if ( collision.gameObject.tag == "Car")
+            if ( hit.collider.gameObject.tag == "Car")
             {
                 isTouchingVehicle = true;
-                vehicle = collision.gameObject;
+                vehicle = hit.collider.gameObject;
                 vehicle.GetComponent<MoveSteerVehicle>().drivable = true;
+                cc.enabled = false;
                 
 
             }

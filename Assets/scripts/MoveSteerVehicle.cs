@@ -69,21 +69,10 @@ public class MoveSteerVehicle : MonoBehaviour
     // Update is called once per frame
     public void LateUpdate()
     {
-        GameObject newBullet;
         if (Input.GetKeyDown("r"))
         {
             rb.rotation = Quaternion.identity;
         }
-
-        if (Input.GetKeyDown("space"))
-        {
-
-            //newBullet = Instantiate(bullet);
-            //newBullet.transform.position = bulletSpawnPoint.position;
-            //newBullet.GetComponent<Rigidbody>().velocity = (transform.forward * 51) + (transform.up * 10);
-        }
-
-
     }
 
 
@@ -99,7 +88,6 @@ public class MoveSteerVehicle : MonoBehaviour
             
         }
         UpdateWheelPoses();
-
     }
 
 
@@ -141,9 +129,7 @@ public class MoveSteerVehicle : MonoBehaviour
         Vector3 vel = rb.velocity;
         float magnitude = vel.magnitude;
 
-
         Vector3 localVel = transform.InverseTransformDirection(rb.velocity);
-        print("lv=" + localVel);
 
         if (verticalInput < 0)
         {
