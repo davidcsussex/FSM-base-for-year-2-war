@@ -18,8 +18,10 @@ public class MoveSteerVehicle : MonoBehaviour
 
     public Transform flt, frt, rlt, rrt;
 
-    public Vector3 playerDrivingOffset; 
-
+    [Header("Vehicle Settings")]
+    public Vector3 playerDrivingOffset;
+    public float cameraHeightOffset;
+    public float cameraDistanceOffset;
     public float maxSteerAngle = 30;
     public float motorForce = 50;
     public float brakeForce = 600f;
