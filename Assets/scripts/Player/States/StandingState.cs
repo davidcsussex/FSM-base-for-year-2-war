@@ -30,6 +30,7 @@ namespace Player
         {
             base.LogicUpdate();
 
+
             if (player.CheckForMovement() == true)
             {
                 sm.ChangeState(player.walkingState);

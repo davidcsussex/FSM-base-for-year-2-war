@@ -6,6 +6,7 @@ using UnityEngine.VFX;
 using UnityEngine.InputSystem;
 using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
+using UnityEngine.AI;
 
 namespace Player
 {
@@ -23,6 +24,9 @@ namespace Player
         public Animator anim;
 
         [HideInInspector]
+        public NavMeshAgent agent;
+
+        [HideInInspector]
         public GameObject vehicle;
 
 
@@ -33,6 +37,7 @@ namespace Player
         public JumpingState jumpingState;
         public WalkingState walkingState;
         public DrivingState drivingState;
+        public EnterCarState enterCarState;
         public DelayState delayState;
 
         bool isGrounded;
@@ -42,6 +47,7 @@ namespace Player
         public float moveSpeed = 100;
         public float drivingForce = 4000;
         public float walkSpeed = 10f;
+        public float reEnterVehicleTimer;
 
         public Camera cam;
         public CharacterController cc;
@@ -55,6 +61,7 @@ namespace Player
             rb = GetComponent<Rigidbody>();
             anim = GetComponent<Animator>();
             cc = GetComponent<CharacterController>();
+            agent = GetComponent<NavMeshAgent>();
 
 
             // set up the variables for your new states here
@@ -63,11 +70,14 @@ namespace Player
             delayState = new DelayState(this, sm);
             walkingState = new WalkingState(this, sm);
             drivingState = new DrivingState(this, sm);
+            enterCarState = new EnterCarState(this, sm);
 
             collider1 = GetComponent<CapsuleCollider>();
 
             // initialise the statemachine with the default state
             sm.Init(standingState);
+
+            agent.enabled = false;  // navmesh agent is off by default
 
             //initialise variables
             isGrounded = false;
@@ -129,6 +139,13 @@ namespace Player
                 text += "\nPress R to reset rotation";
             }
 
+            if( CanEnterVehicle() == true )
+            {
+                text += "\nPress E to enter vehicle";
+            }
+
+            text += "\nRe Enter Veh timer=" + reEnterVehicleTimer;
+
 
             GUILayout.BeginArea(new Rect(10f, 10f, 1600f, 1600f));
             GUILayout.Label($"<color=white><size=24>{text}</size></color>");
@@ -155,6 +172,8 @@ namespace Player
 
         public bool CanEnterVehicle()
         {
+            reEnterVehicleTimer -= Time.deltaTime;
+
             return isTouchingVehicle;
         }
 
@@ -166,12 +185,14 @@ namespace Player
             {
                 isTouchingVehicle = true;
                 vehicle = hit.collider.gameObject;
-                vehicle.GetComponent<MoveSteerVehicle>().drivable = true;
-                cc.enabled = false;
-                
+//                vehicle.GetComponent<MoveSteerVehicle>().drivable = true;
+//                cc.enabled = false;
+
+
 
             }
         }
+
 
         public void CheckForDeath()
         {
@@ -180,6 +201,16 @@ namespace Player
                 string currentSceneName = SceneManager.GetActiveScene().name;
                 SceneManager.LoadScene( currentSceneName );
             }
+        }
+
+        public void PlayerEnterCarEvent()
+        {
+            //animator calls this when animation finished
+            vehicle.GetComponent<MoveSteerVehicle>().drivable = true;
+            anim.SetBool("EnterCar", false);
+            sm.ChangeState(drivingState);
+            cc.enabled = false;
+            agent.enabled = false;
         }
     }
 

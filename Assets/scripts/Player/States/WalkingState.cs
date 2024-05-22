@@ -26,6 +26,7 @@ namespace Player
 
             Debug.Log("start walking");
             player.anim.SetBool("Walk", true);
+            player.isTouchingVehicle = false;
         }
 
         public override void Exit()
@@ -44,6 +45,7 @@ namespace Player
         {
             base.LogicUpdate();
 
+
             mov = player.GetMovement();
 
             if (player.CheckForMovement() == false)
@@ -51,9 +53,10 @@ namespace Player
                 sm.ChangeState(player.standingState);
             }
 
-            if( player.CanEnterVehicle() )
+            if( player.CanEnterVehicle() && player.reEnterVehicleTimer < 0 )
             {
-                sm.ChangeState(player.drivingState);
+                sm.ChangeState(player.enterCarState);
+                return;
             }
 
             DoRun();

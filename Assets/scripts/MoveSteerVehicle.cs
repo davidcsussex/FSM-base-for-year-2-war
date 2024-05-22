@@ -25,6 +25,7 @@ public class MoveSteerVehicle : MonoBehaviour
     public float maxSteerAngle = 30;
     public float motorForce = 50;
     public float brakeForce = 600f;
+    public Transform doorEntryPoint;    // position player will walk to to get into car
 
     public bool drivable;    //set by playerscript
 

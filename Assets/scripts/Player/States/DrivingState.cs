@@ -1,6 +1,5 @@
 
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 namespace Player
 {
     public class DrivingState : State
@@ -88,6 +87,7 @@ namespace Player
             player.collider1.enabled = false;
             player.transform.rotation = player.vehicle.transform.rotation;
             player.cc.enabled = false;
+            player.agent.enabled = false;
 
             player.cam.GetComponent<CameraScript>().height = player.vehicle.GetComponent<MoveSteerVehicle>().cameraHeightOffset;
             player.cam.GetComponent<CameraScript>().distance = player.vehicle.GetComponent<MoveSteerVehicle>().cameraDistanceOffset;
