@@ -129,10 +129,10 @@ public class MoveSteerVehicle : MonoBehaviour
 
     void Brake()
     {
-        Vector3 vel = rb.velocity;
+        Vector3 vel = rb.linearVelocity;
         float magnitude = vel.magnitude;
 
-        Vector3 localVel = transform.InverseTransformDirection(rb.velocity);
+        Vector3 localVel = transform.InverseTransformDirection(rb.linearVelocity);
 
         if (verticalInput < 0)
         {

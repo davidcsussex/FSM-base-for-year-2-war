@@ -14,7 +14,7 @@ namespace Player
         public override void Enter()
         {
             base.Enter();
-            player.rb.velocity = new Vector2(player.rb.velocity.x, 10);
+            player.rb.linearVelocity = new Vector2(player.rb.linearVelocity.x, 10);
         }
 
         public override void Exit()
@@ -37,7 +37,7 @@ namespace Player
 
         bool JumpEnded()
         {
-            if (player.rb.velocity.y < 0)
+            if (player.rb.linearVelocity.y < 0)
             {
                 if (player.IsGrounded() == true)
                     return true;
