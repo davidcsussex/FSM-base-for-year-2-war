@@ -89,6 +89,7 @@ namespace Player
         {
             sm.CurrentState.HandleInput();
             sm.CurrentState.LogicUpdate();
+            SetDebugSpeed();
         }
 
         public void LateUpdate()
@@ -211,6 +212,44 @@ namespace Player
             sm.ChangeState(drivingState);
             cc.enabled = false;
             agent.enabled = false;
+        }
+
+
+       
+
+
+        void SetDebugSpeed()
+        {
+            // set speed
+            if (Input.GetKeyDown("1"))
+                Time.timeScale = 1f;
+
+            if (Input.GetKeyDown("2"))
+                Time.timeScale = 0.8f;
+
+            if (Input.GetKeyDown("3"))
+                Time.timeScale = 0.6f;
+
+            if (Input.GetKeyDown("4"))
+                Time.timeScale = 0.4f;
+
+            if (Input.GetKeyDown("5"))
+                Time.timeScale = 0.2f;
+
+            if (Input.GetKeyDown("6"))
+                Time.timeScale = 0.1f;
+
+            if (Input.GetKeyDown("7"))
+                Time.timeScale = 0.05f;
+
+            if (Input.GetKeyDown("8"))
+                Time.timeScale = 0.03f;
+
+            if (Input.GetKeyDown("9"))
+                Time.timeScale = 0.01f;
+
+            if (Input.GetKeyDown("0"))
+                Time.timeScale = 0.001f;
         }
     }
 

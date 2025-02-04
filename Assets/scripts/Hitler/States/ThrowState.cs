@@ -22,6 +22,11 @@ namespace Hitler
 
             enemy.agent.enabled=false;
             enemy.rb.isKinematic=false;  // disable rb
+
+
+            enemy.dummyGrenade.SetActive(true);
+            enemy.handGrenade.SetActive(false);
+
             //enemy.agent.destination = enemy.lookAtTarget.transform.position; 
 
             //player.vel.x = player.vel.z = 0;

@@ -10,6 +10,8 @@ namespace Hitler
         Animator anim;
 
         public GameObject grenadePrefab;
+        public GameObject dummyGrenade;
+        public GameObject handGrenade;  // grenade attached to model
         public GameObject throwPoint;
 
         [HideInInspector]
@@ -52,6 +54,9 @@ namespace Hitler
             rb = GetComponent<Rigidbody>();
 
             sm.Init(idleState);
+
+            handGrenade.SetActive(false);
+
 
         }
 
@@ -112,7 +117,10 @@ namespace Hitler
             Quaternion targetRotation;
             bool doLook = true;
 
-            while( doLook==true )
+            dummyGrenade.SetActive(false);
+
+
+            while ( doLook==true )
             {
                 targetRotation = Quaternion.LookRotation(lookAtTarget.transform.position - transform.position);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speed * Time.deltaTime);
@@ -133,9 +141,12 @@ namespace Hitler
 
 
             anim.SetTrigger("throw");
+            dummyGrenade.SetActive(true);
+
 
             yield return new WaitForSeconds(0.5f);
 
+            anim.ResetTrigger("throw");
             sm.ChangeState(idleState);
 
             
@@ -146,14 +157,36 @@ namespace Hitler
 
         public void DoThrow()
         {
+            // point at which to throw spawned grenade
+
+            //spawn a new grenade prefab and disable the dummy one
+            print("spawn grenade object");
             spawnedObject = Instantiate(grenadePrefab, throwPoint.transform.position, Quaternion.identity);
             spawnedObject.transform.parent = throwPoint.transform;
-
+            spawnedObject.GetComponent<Rigidbody>().useGravity = false;
             Rigidbody rb = spawnedObject.GetComponent<Rigidbody>();
             rb.useGravity = true;
             rb.linearVelocity = (transform.forward * 6) + (transform.up * 4);
             spawnedObject.transform.parent = null;
 
+            handGrenade.SetActive(false);
+
+
+        }
+
+        public void PickupGrenade()
+        {
+            //disable grenade on ground
+            //enable grenade in hand
+            dummyGrenade.SetActive(false);
+            handGrenade.SetActive(true);
+
+
+
+        }
+
+        public void EnableGrenadeInHand()
+        {
         }
     }
 }
