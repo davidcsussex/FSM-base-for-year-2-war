@@ -24,7 +24,7 @@ namespace Player
         {
             base.Enter();
 
-            Debug.Log("start walking");
+            //Debug.Log("start walking");
             player.anim.SetBool("Walk", true);
             player.isTouchingVehicle = false;
         }
@@ -83,7 +83,7 @@ namespace Player
             //capturing Input from Player
 
             float hMov = Input.GetAxisRaw("Horizontal");
-            Debug.Log("hm=" + hMov);
+            //Debug.Log("hm=" + hMov);
 
             Vector3 movement = new Vector3(hMov, 0, Input.GetAxisRaw("Vertical")).normalized;
             if (movement.magnitude >= 0.1f)
@@ -102,7 +102,9 @@ namespace Player
             base.PhysicsUpdate();
 
             
-            Debug.Log("doing run");
+            //Debug.Log("doing run");
         }
+
+
     }
 }

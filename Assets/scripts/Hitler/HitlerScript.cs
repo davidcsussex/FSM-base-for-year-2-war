@@ -21,15 +21,18 @@ namespace Hitler
         public StateMachine sm;
         GameObject spawnedObject;
         public NavMeshAgent agent;
+        public GameObject testSphere; //used to show  next target point
 
-        
+        public LayerMask groundLayer;
+
+
 
         public float speed;
 
         public IdleState idleState;
         public ChaseState chaseState;
-
         public ThrowState throwState;
+        public MoveToPointState moveToPointState;
 
         public Rigidbody rb;
 
@@ -50,12 +53,16 @@ namespace Hitler
             idleState = new IdleState(this, sm);
             chaseState = new ChaseState(this, sm);
             throwState = new ThrowState(this, sm);
+            moveToPointState = new MoveToPointState(this, sm);
 
             rb = GetComponent<Rigidbody>();
 
             sm.Init(idleState);
 
             handGrenade.SetActive(false);
+
+            groundLayer = LayerMask.GetMask("Ground");
+
 
 
         }
@@ -187,6 +194,21 @@ namespace Hitler
 
         public void EnableGrenadeInHand()
         {
+        }
+
+        public bool TestSphereCast( Vector3 start, Vector3 end, float size, float maxDist)
+        {
+            RaycastHit hit;
+            Vector3 dir = (start - end).normalized;
+            bool hasHit = Physics.SphereCast(start, 1.0f, dir, out hit, maxDist, ~groundLayer);
+
+            if( hasHit )
+            {
+                print("boxcast hit " + hit.collider.name);
+            }
+
+            return hasHit;
+
         }
     }
 }

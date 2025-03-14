@@ -54,13 +54,19 @@ namespace Hitler
                 sm.ChangeState(enemy.chaseState);
             }
 
+            if (Input.GetKey("m"))
+            {
+                sm.ChangeState(enemy.moveToPointState);
+            }
+
+
 
 
             //UIscript.ui.DrawText("standing");
 
             //player.MovePlayer();
 
-            
+
             //player.CheckForFall();
             //player.CheckForRun();
             /*
@@ -80,8 +86,8 @@ namespace Hitler
             //player.CheckForLadderClimb();   // climbing ladder overrides crouch
             player.UpdateCC();
 */
-            
-            
+
+
         }
 
         public override void PhysicsUpdate()
