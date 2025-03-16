@@ -8,7 +8,7 @@ namespace Hitler
     public class MoveToPointState : State
     {
         float stopDistance;
-        float ct;
+        float recheckTime;
         bool targetSet,reachedTarget;
 
 
@@ -38,13 +38,12 @@ namespace Hitler
             //player.xv = player.yv = 0;
 
             //player.anim.SetBool("jump", false);
-            //player.anim.SetBool("run", false);
             //player.anim.SetBool("idle", true);
             //player.PlayAnim("idle_01");
 
             stopDistance = Random.Range(6, 15);
 
-            ct = 0;
+            recheckTime = 0;
 
             //check for everything apart from ground
 
@@ -53,6 +52,7 @@ namespace Hitler
         public override void Exit()
         {
             base.Exit();
+            enemy.anim.SetBool("run", false);
 
             //player.anim.SetBool("stand", false );
         }
@@ -68,13 +68,18 @@ namespace Hitler
         {
             base.LogicUpdate();
 
+            if( recheckTime  > 0 )
+            {
+                recheckTime -= Time.deltaTime;
+                //return;
+            }
 
             if (targetSet == false)
             {
 
 
                 //create a random point on edge of circle of specified radius around player
-                float radius = 12;
+                float radius = 8;
                 var vector2 = Random.insideUnitCircle.normalized * radius;
                 vector2.x += enemy.lookAtTarget.transform.position.x;
                 vector2.y += enemy.lookAtTarget.transform.position.z;
@@ -88,7 +93,7 @@ namespace Hitler
 
                     if( TargetReachable()==true )
                     {
-                        if (enemy.TestSphereCast(enemy.transform.position, targetPoint, 0.6f, 100f) == false)
+                        if (enemy.TestSphereCast(enemy.transform.position, targetPoint, 0.6f) == false)
                         {
                             targetSet = true;
                             Debug.Log("target is set");
@@ -96,12 +101,15 @@ namespace Hitler
                             enemy.agent.enabled = true;
                             enemy.rb.isKinematic = true;  // disable rb
                             enemy.agent.destination = targetPoint;// enemy.lookAtTarget.transform.position;
+                            enemy.anim.SetBool("run", true);
+
 
 
                         }
                         else
                         {
                             Debug.Log("target not reachable object in way, trying another");
+                            recheckTime = 1000;
 
                         }
                     }
@@ -120,13 +128,19 @@ namespace Hitler
                     //targetSet = true;
             }
 
-            if( Input.GetKeyDown("l"))
-            {
-            }
-
-            if( AgentReachedDestination() == true )
+            if( Input.GetKeyDown("r"))
             {
                 targetSet = false;
+                recheckTime = 1;
+
+            }
+
+            if ( AgentReachedDestination() == true )
+            {
+                targetSet = false;
+                recheckTime = 1;
+
+                enemy.sm.ChangeState(enemy.throwState);
 
             }
 

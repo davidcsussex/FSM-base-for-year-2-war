@@ -7,7 +7,7 @@ namespace Hitler
 {
     public class HitlerScript : MonoBehaviour
     {
-        Animator anim;
+        public Animator anim;
 
         public GameObject grenadePrefab;
         public GameObject dummyGrenade;
@@ -61,7 +61,7 @@ namespace Hitler
 
             handGrenade.SetActive(false);
 
-            groundLayer = LayerMask.GetMask("Ground");
+            groundLayer = LayerMask.GetMask("Ground") + LayerMask.GetMask("Enemy Weapon");
 
 
 
@@ -111,12 +111,6 @@ namespace Hitler
         }
 
 
-        public void ThrowGrenadex()
-        {
-            //StartCoroutine("ThrowGrenadeCoRoutine");
-
-        }
-
         IEnumerator ThrowGrenade()
         {
            
@@ -130,7 +124,7 @@ namespace Hitler
             while ( doLook==true )
             {
                 targetRotation = Quaternion.LookRotation(lookAtTarget.transform.position - transform.position);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speed * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 5* speed * Time.deltaTime);
 
 
                 //get angle between enemy and player. If >0.9999 then enemy is looking at player
@@ -140,7 +134,7 @@ namespace Hitler
                 if( dot > 0.995f )
                 {
                     doLook = false;
-                    print("dot look=" + dot);
+                    //print("dot look=" + dot);
                 }
                 yield return null;
             }
@@ -154,6 +148,9 @@ namespace Hitler
             yield return new WaitForSeconds(0.5f);
 
             anim.ResetTrigger("throw");
+
+            yield return new WaitForSeconds(1.5f);
+
             sm.ChangeState(idleState);
 
             
@@ -196,15 +193,20 @@ namespace Hitler
         {
         }
 
-        public bool TestSphereCast( Vector3 start, Vector3 end, float size, float maxDist)
+        public bool TestSphereCast( Vector3 start, Vector3 end, float size)
         {
+            float maxDist = (end - start).magnitude;
             RaycastHit hit;
-            Vector3 dir = (start - end).normalized;
-            bool hasHit = Physics.SphereCast(start, 1.0f, dir, out hit, maxDist, ~groundLayer);
+            Vector3 dir = (end-start).normalized;
+            bool hasHit = Physics.SphereCast(start, 0.2f, dir, out hit, maxDist, ~groundLayer);
+
+            Color color = new Color(1, 1, 1);
+//            Debug.DrawLine(start, end, color, 1);
+            Debug.DrawRay(start, dir*maxDist, color, 1);
 
             if( hasHit )
             {
-                print("boxcast hit " + hit.collider.name);
+                print("sphere hit " + hit.collider.name);
             }
 
             return hasHit;

@@ -5,6 +5,7 @@ namespace Hitler
     public class IdleState : State
     {
 
+        float timeToThrow;
 
         // constructor
         public IdleState(HitlerScript player, StateMachine sm) : base(player, sm)
@@ -24,9 +25,11 @@ namespace Hitler
             //player.xv = player.yv = 0;
 
             //player.anim.SetBool("jump", false);
-            //player.anim.SetBool("run", false);
+            enemy.anim.SetBool("run", false);
             //player.anim.SetBool("idle", true);
             //player.PlayAnim("idle_01");
+
+            timeToThrow = Random.Range(1, 3);
 
         }
 
@@ -54,9 +57,17 @@ namespace Hitler
                 sm.ChangeState(enemy.chaseState);
             }
 
-            if (Input.GetKey("m"))
+            if( timeToThrow > 0 )
+            {
+                timeToThrow -= Time.deltaTime;
+            }
+            else
             {
                 sm.ChangeState(enemy.moveToPointState);
+            }
+            if (Input.GetKey("m"))
+            {
+                timeToThrow = 0; //do throw instantly
             }
 
 

@@ -29,6 +29,10 @@ namespace Player
         [HideInInspector]
         public GameObject vehicle;
 
+        public GameObject hat;
+        Transform hatTransformParent;
+        Vector3 hatTransformPosition;
+
 
         public CapsuleCollider collider1;
 
@@ -251,6 +255,38 @@ namespace Player
             if (Input.GetKeyDown("0"))
                 Time.timeScale = 0.001f;
         }
+
+        private void OnTriggerEnter( Collider collision )
+        {
+            if( collision.gameObject.tag == "Weapon")
+            {
+                print("Grenade has hit player");
+                if( hat.GetComponent<Rigidbody>()==null)
+                {
+                    hatTransformParent = hat.transform.parent;
+                    hatTransformPosition = hat.transform.position;
+                    hat.transform.parent = null;
+                    hat.AddComponent<Rigidbody>();
+                    hat.GetComponent<Rigidbody>().linearVelocity = new Vector3(0, 10, 0);
+                    StartCoroutine("ReplaceHat");
+                }
+
+            }
+            
+        }
+
+        IEnumerator ReplaceHat()
+        {
+            yield return new WaitForSeconds(5f);
+            hat.transform.parent = hatTransformParent;
+            hat.transform.position = hatTransformPosition;
+            hat.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+
+            Destroy(hat.GetComponent<Rigidbody>());
+
+            yield return null;
+        }
+
     }
 
 }
