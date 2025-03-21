@@ -1,4 +1,5 @@
 
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 namespace Hitler
 {
@@ -63,7 +64,19 @@ namespace Hitler
             }
             else
             {
-                sm.ChangeState(enemy.moveToPointState);
+                //random shake fist instead of moving to point
+
+                int rr = Random.Range(0, 10);
+                Debug.Log("rand=" + rr);
+                if (rr >= 8)
+                {
+                    sm.ChangeState(enemy.shakeFistState);
+                    Debug.Log("SHAKE");
+                }
+                else
+                {
+                    sm.ChangeState(enemy.moveToPointState);
+                }
             }
             if (Input.GetKey("m"))
             {

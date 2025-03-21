@@ -22,6 +22,7 @@ namespace Hitler
         GameObject spawnedObject;
         public NavMeshAgent agent;
         public GameObject testSphere; //used to show  next target point
+        public GameObject navCheckSphere; //used to show  next target point
 
         public LayerMask groundLayer;
 
@@ -32,6 +33,7 @@ namespace Hitler
         public IdleState idleState;
         public ChaseState chaseState;
         public ThrowState throwState;
+        public ShakeFistState shakeFistState;
         public MoveToPointState moveToPointState;
 
         public Rigidbody rb;
@@ -53,6 +55,7 @@ namespace Hitler
             idleState = new IdleState(this, sm);
             chaseState = new ChaseState(this, sm);
             throwState = new ThrowState(this, sm);
+            shakeFistState = new ShakeFistState(this, sm);
             moveToPointState = new MoveToPointState(this, sm);
 
             rb = GetComponent<Rigidbody>();
@@ -70,6 +73,8 @@ namespace Hitler
         // Update is called once per frame
         void Update()
         {
+            GUIScript.gui.text = "hello2\n";
+
             //UI_Text1.Debug("Enemy State=" + sm.GetState());
 
             sm.CurrentState.HandleInput();

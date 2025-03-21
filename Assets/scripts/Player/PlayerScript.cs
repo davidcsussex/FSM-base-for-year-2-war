@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
 using UnityEngine.AI;
+using NUnit.Framework;
 
 namespace Player
 {
@@ -29,7 +30,9 @@ namespace Player
         [HideInInspector]
         public GameObject vehicle;
 
-        public GameObject hat;
+        public GameObject hat;  // link to hat attached to model
+        public GameObject hatPrefab;    //new prefab hat spawned onto player when hit
+        bool grenadeHit = false;// true if grenade has hit player
         Transform hatTransformParent;
         Vector3 hatTransformPosition;
 
@@ -136,6 +139,7 @@ namespace Player
 
         private void OnGUI()
         {
+            /*
             string text = "Current state = " + sm.GetState();
 
             if( sm.GetState() == drivingState )
@@ -155,6 +159,7 @@ namespace Player
             GUILayout.BeginArea(new Rect(10f, 10f, 1600f, 1600f));
             GUILayout.Label($"<color=white><size=24>{text}</size></color>");
             GUILayout.EndArea();
+            */
         }
 
 
@@ -258,19 +263,15 @@ namespace Player
 
         private void OnTriggerEnter( Collider collision )
         {
-            if( collision.gameObject.tag == "Weapon")
+            if( collision.gameObject.tag == "Weapon" && grenadeHit==false)
             {
-                print("Grenade has hit player");
-                if( hat.GetComponent<Rigidbody>()==null)
-                {
-                    hatTransformParent = hat.transform.parent;
-                    hatTransformPosition = hat.transform.position;
-                    hat.transform.parent = null;
-                    hat.AddComponent<Rigidbody>();
-                    hat.GetComponent<Rigidbody>().linearVelocity = new Vector3(0, 10, 0);
-                    StartCoroutine("ReplaceHat");
-                }
+                grenadeHit = true;
+                GameObject newHat = GameObject.Instantiate(hatPrefab, hat.transform.position, Quaternion.identity );
+                newHat.GetComponent<Rigidbody>().linearVelocity = new Vector3(0, 10, 0);
+                hat.SetActive(false);
 
+                print("Grenade has hit player");
+                StartCoroutine("ReplaceHat");
             }
             
         }
@@ -278,12 +279,8 @@ namespace Player
         IEnumerator ReplaceHat()
         {
             yield return new WaitForSeconds(5f);
-            hat.transform.parent = hatTransformParent;
-            hat.transform.position = hatTransformPosition;
-            hat.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
-
-            Destroy(hat.GetComponent<Rigidbody>());
-
+            hat.SetActive(true);
+            grenadeHit = false;
             yield return null;
         }
 

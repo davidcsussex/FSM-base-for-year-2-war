@@ -10,6 +10,9 @@ namespace Hitler
         float stopDistance;
         float recheckTime;
         bool targetSet,reachedTarget;
+        Vector3 targetPoint;
+        NavMeshHit hit;
+        int attempts;
 
 
         // constructor
@@ -43,7 +46,7 @@ namespace Hitler
 
             stopDistance = Random.Range(6, 15);
 
-            recheckTime = 0;
+            recheckTime = 2;
 
             //check for everything apart from ground
 
@@ -68,7 +71,123 @@ namespace Hitler
         {
             base.LogicUpdate();
 
-            if( recheckTime  > 0 )
+            //OldLogic();
+            NewLogic();
+        }
+
+
+        void NewLogic()
+        {
+
+            if (recheckTime > 0)
+            {
+                recheckTime -= Time.deltaTime;
+                return;
+            }
+
+
+            if (targetSet == false)
+            {
+                int attemptLoop = 1;
+
+                while (attemptLoop < 256)
+                {
+                    // get a random point around player
+                    GetRandomPoint();
+
+                    if (ValidDistance() == true)
+                    {
+                        if (TargetReachable() == true)
+                        {
+                            if ( ValidLineOfSight() == true )
+                            {
+                                enemy.testSphere.transform.position = targetPoint;
+                                attempts = attemptLoop;
+                                attemptLoop = 256;
+
+                                enemy.agent.enabled = true;
+                                enemy.rb.isKinematic = true;  // disable rb
+                                enemy.agent.destination = targetPoint;
+                                targetSet = true;
+                                enemy.anim.SetBool("run", true);
+                            }
+                        }
+                    }
+
+                    attemptLoop++;
+                }
+            }
+
+            if (targetSet == true)
+            {
+                //enemy is running to a point, check for destination reached
+
+                if (AgentReachedDestination() == true)
+                {
+                    targetSet = false;
+                    recheckTime = 1;
+
+                    enemy.sm.ChangeState(enemy.throwState);
+                }
+            }
+
+
+            GUIScript.gui.text = "took " + attempts + "  attempts";
+
+
+
+
+        }
+
+
+        bool ValidDistance()
+        {
+            // ensure the enemy is far enough away from the new random point
+            float dist = (enemy.transform.position - targetPoint).magnitude;
+            if (dist > 2)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+            void GetRandomPoint()
+        {
+            //create a random point on edge of circle of specified radius around player
+            float radius = 8;
+            var vector2 = Random.insideUnitCircle.normalized * radius;
+            vector2.x += enemy.lookAtTarget.transform.position.x;
+            vector2.y += enemy.lookAtTarget.transform.position.z;
+            targetPoint = new Vector3(vector2.x, 0.5f, vector2.y);
+        }
+
+        bool ValidPointOnNavmesh()
+        {
+            //check to see if point is reachable on navmesh
+            if (NavMesh.SamplePosition(targetPoint, out hit, 1.0f, NavMesh.AllAreas))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        //check to see if there is a clear line of sight to the new point
+        bool ValidLineOfSight()
+        {
+            if( enemy.TestSphereCast(enemy.transform.position, targetPoint, 0.6f) == true )
+            {
+
+                return false;
+            }
+            return true;
+        }
+
+
+        void OldLogic()
+        {
+
+            if (recheckTime > 0)
             {
                 recheckTime -= Time.deltaTime;
                 //return;
@@ -91,7 +210,7 @@ namespace Hitler
                 {
                     //check to ensure there are no objects at this point
 
-                    if( TargetReachable()==true )
+                    if (TargetReachable() == true)
                     {
                         if (enemy.TestSphereCast(enemy.transform.position, targetPoint, 0.6f) == false)
                         {
@@ -120,22 +239,22 @@ namespace Hitler
                     }
                 }
 
-                    //GameObject o = GameObject.Instantiate(enemy.cubePrefab);
-                    //o.transform.position = new Vector3(vector2.x, 0.5f, vector2.y);
+                //GameObject o = GameObject.Instantiate(enemy.cubePrefab);
+                //o.transform.position = new Vector3(vector2.x, 0.5f, vector2.y);
 
 
-                    //check target can be reached
-                    //targetSet = true;
+                //check target can be reached
+                //targetSet = true;
             }
 
-            if( Input.GetKeyDown("r"))
+            if (Input.GetKeyDown("r"))
             {
                 targetSet = false;
                 recheckTime = 1;
 
             }
 
-            if ( AgentReachedDestination() == true )
+            if (AgentReachedDestination() == true)
             {
                 targetSet = false;
                 recheckTime = 1;
@@ -182,9 +301,8 @@ namespace Hitler
             //player.CheckForLadderClimb();   // climbing ladder overrides crouch
             player.UpdateCC();
 */
-
-
         }
+
 
         public override void PhysicsUpdate()
         {
