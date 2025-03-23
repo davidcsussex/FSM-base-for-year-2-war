@@ -7,7 +7,7 @@ public class HatScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        timeToDie = 3;
     }
 
     // Update is called once per frame
@@ -16,7 +16,7 @@ public class HatScript : MonoBehaviour
         timeToDie -= Time.deltaTime;
         if( timeToDie < 0 )
         {
-            Destroy( this );
+            Destroy(gameObject);
         }
         
     }
