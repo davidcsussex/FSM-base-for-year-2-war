@@ -7,7 +7,7 @@ public class HatScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        timeToDie = 3;
+        timeToDie = 6;
     }
 
     // Update is called once per frame
