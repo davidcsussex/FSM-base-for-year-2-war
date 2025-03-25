@@ -97,6 +97,28 @@ namespace Player
             sm.CurrentState.HandleInput();
             sm.CurrentState.LogicUpdate();
             SetDebugSpeed();
+
+            if( Input.GetButtonDown("Fire1"))
+            {
+                print("***fire 1 PRESSED***");
+            }
+            if (Input.GetButtonDown("Fire2"))
+            {
+                print("***fire 2 PRESSED***");
+            }
+            if (Input.GetButtonDown("Fire3"))
+            {
+                print("***fire 3 PRESSED***");
+            }
+            if (Input.GetButtonDown("Shoulder"))
+            {
+                print("***shoulder PRESSED***");
+            }
+
+
+
+
+
         }
 
         public void LateUpdate()
