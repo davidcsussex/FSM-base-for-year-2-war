@@ -62,7 +62,7 @@ namespace Hitler
 
             sm.Init(idleState);
 
-            handGrenade.SetActive(false);
+            //handGrenade.SetActive(false);
 
             groundLayer = LayerMask.GetMask("Ground") + LayerMask.GetMask("Enemy Weapon");
 
@@ -123,7 +123,7 @@ namespace Hitler
             Quaternion targetRotation;
             bool doLook = true;
 
-            dummyGrenade.SetActive(false);
+            //dummyGrenade.SetActive(false);
 
 
             while ( doLook==true )
@@ -147,12 +147,14 @@ namespace Hitler
 
 
             anim.SetTrigger("throw");
-            dummyGrenade.SetActive(true);
+            //dummyGrenade.SetActive(true);
 
 
             yield return new WaitForSeconds(0.5f);
 
             anim.ResetTrigger("throw");
+
+            handGrenade.SetActive(false);
 
             yield return new WaitForSeconds(1.5f);
 
@@ -178,7 +180,7 @@ namespace Hitler
             rb.linearVelocity = (transform.forward * 6) + (transform.up * 4);
             spawnedObject.transform.parent = null;
 
-            handGrenade.SetActive(false);
+            //handGrenade.SetActive(false);
 
 
         }
@@ -187,8 +189,8 @@ namespace Hitler
         {
             //disable grenade on ground
             //enable grenade in hand
-            dummyGrenade.SetActive(false);
-            handGrenade.SetActive(true);
+            //dummyGrenade.SetActive(false);
+            //handGrenade.SetActive(true);
 
 
 
