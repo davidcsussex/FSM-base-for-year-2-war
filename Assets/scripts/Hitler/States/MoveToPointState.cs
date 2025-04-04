@@ -127,7 +127,8 @@ namespace Hitler
                     targetSet = false;
                     recheckTime = 1;
 
-                    enemy.sm.ChangeState(enemy.throwState);
+                    //enemy.sm.ChangeState(enemy.throwState);
+                    enemy.sm.ChangeState(enemy.shootState);
                 }
             }
 
@@ -184,124 +185,6 @@ namespace Hitler
         }
 
 
-        void OldLogic()
-        {
-
-            if (recheckTime > 0)
-            {
-                recheckTime -= Time.deltaTime;
-                //return;
-            }
-
-            if (targetSet == false)
-            {
-
-
-                //create a random point on edge of circle of specified radius around player
-                float radius = 8;
-                var vector2 = Random.insideUnitCircle.normalized * radius;
-                vector2.x += enemy.lookAtTarget.transform.position.x;
-                vector2.y += enemy.lookAtTarget.transform.position.z;
-                Vector3 targetPoint = new Vector3(vector2.x, 0.5f, vector2.y);
-                enemy.testSphere.transform.position = targetPoint;
-
-                NavMeshHit hit;
-                if (NavMesh.SamplePosition(targetPoint, out hit, 1.0f, NavMesh.AllAreas))
-                {
-                    //check to ensure there are no objects at this point
-
-                    if (TargetReachable() == true)
-                    {
-                        if (enemy.TestSphereCast(enemy.transform.position, targetPoint, 0.6f) == false)
-                        {
-                            targetSet = true;
-                            Debug.Log("target is set");
-
-                            enemy.agent.enabled = true;
-                            enemy.rb.isKinematic = true;  // disable rb
-                            enemy.agent.destination = targetPoint;// enemy.lookAtTarget.transform.position;
-                            enemy.anim.SetBool("run", true);
-
-
-
-                        }
-                        else
-                        {
-                            Debug.Log("target not reachable object in way, trying another");
-                            recheckTime = 1000;
-
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("target not reachable, trying another");
-
-                    }
-                }
-
-                //GameObject o = GameObject.Instantiate(enemy.cubePrefab);
-                //o.transform.position = new Vector3(vector2.x, 0.5f, vector2.y);
-
-
-                //check target can be reached
-                //targetSet = true;
-            }
-
-            if (Input.GetKeyDown("r"))
-            {
-                targetSet = false;
-                recheckTime = 1;
-
-            }
-
-            if (AgentReachedDestination() == true)
-            {
-                targetSet = false;
-                recheckTime = 1;
-
-                enemy.sm.ChangeState(enemy.throwState);
-
-            }
-
-
-
-
-            // get distance between enemy and player. If in range change state to throw
-
-            //float dist = Vector3.Distance(enemy.transform.position, enemy.lookAtTarget.transform.position);
-
-            //if (dist < stopDistance)
-            {
-                //  enemy.sm.ChangeState(enemy.throwState);
-            }
-            //Debug.Log("dist=" + dist);
-
-
-            //UIscript.ui.DrawText("standing");
-
-            //player.MovePlayer();
-
-
-            //player.CheckForFall();
-            //player.CheckForRun();
-            /*
-            if( player.CheckForLanding() == true )
-            {
-                player.vel.y = -0.5f;
-            }
-
-            player.CheckForJump();
-            //player.CheckForShoot();
-            
-
-
-
-
-            //player.CheckForCrouch();
-            //player.CheckForLadderClimb();   // climbing ladder overrides crouch
-            player.UpdateCC();
-*/
-        }
 
 
         public override void PhysicsUpdate()

@@ -61,7 +61,8 @@ namespace Hitler
 
             if( dist < stopDistance )
             {
-                enemy.sm.ChangeState( enemy.throwState );
+                //enemy.sm.ChangeState( enemy.throwState );
+                enemy.sm.ChangeState( enemy.shootState );
             }
             Debug.Log("dist=" + dist);
 

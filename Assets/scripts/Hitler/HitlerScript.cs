@@ -12,6 +12,7 @@ namespace Hitler
         public GameObject grenadePrefab;
         public GameObject dummyGrenade;
         public GameObject handGrenade;  // grenade attached to model
+        public GameObject pistol;  // pistol attached to model
         public GameObject throwPoint;
 
         [HideInInspector]
@@ -33,6 +34,7 @@ namespace Hitler
         public IdleState idleState;
         public ChaseState chaseState;
         public ThrowState throwState;
+        public ShootState shootState;
         public ShakeFistState shakeFistState;
         public MoveToPointState moveToPointState;
 
@@ -55,6 +57,7 @@ namespace Hitler
             idleState = new IdleState(this, sm);
             chaseState = new ChaseState(this, sm);
             throwState = new ThrowState(this, sm);
+            shootState = new ShootState(this, sm);
             shakeFistState = new ShakeFistState(this, sm);
             moveToPointState = new MoveToPointState(this, sm);
 
@@ -118,8 +121,6 @@ namespace Hitler
 
         IEnumerator ThrowGrenade()
         {
-           
-
             Quaternion targetRotation;
             bool doLook = true;
 
@@ -146,8 +147,8 @@ namespace Hitler
             // Smoothly rotate towards the target point.
 
 
+            //anim.SetTrigger("throw");
             anim.SetTrigger("throw");
-            //dummyGrenade.SetActive(true);
 
 
             yield return new WaitForSeconds(0.5f);
