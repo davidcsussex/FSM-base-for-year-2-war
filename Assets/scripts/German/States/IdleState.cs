@@ -18,7 +18,7 @@ namespace Hitler
             base.Enter();
 
             enemy.rb.isKinematic=false;  // enable rb
-            enemy.pistol.SetActive(false);
+            //enemy.pistol.SetActive(false);
 
             Debug.Log("started idle state");
             //player.vel.x = player.vel.z = 0;

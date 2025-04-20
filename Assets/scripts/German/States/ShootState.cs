@@ -7,8 +7,11 @@ namespace Hitler
 
         //float timeToShakeFist;
         //float exitStateTime = 3;
-
+        int shotsFired;
         // constructor
+
+
+        public GameObject bulletPrefab;
         public ShootState(HitlerScript player, StateMachine sm) : base(player, sm)
         {
         }
@@ -17,9 +20,12 @@ namespace Hitler
         {
             //timeToShakeFist = Random.Range(0.4f, 3.5f);
             //exitStateTime = 0;
+            shotsFired = 0;
             base.Enter();
+            enemy.pistol.SetActive(true);
 
-            enemy.anim.SetTrigger("shoot");
+            enemy.anim.SetBool("shoot",true);
+
 
         }
 
@@ -38,6 +44,31 @@ namespace Hitler
         }
 
 
+        public void ShootStart()
+        {
+            Debug.Log("doshoot!!!");
+            GameObject bullet= GameObject.Instantiate(enemy.bulletPrefab,enemy.shootPoint.transform.position,enemy.pistol.transform.rotation);
+            bullet.GetComponent<Rigidbody>().linearVelocity = bullet.transform.forward * 10;
+            bullet.transform.rotation = enemy.pistol.transform.rotation;
+            shotsFired++;
+
+
+        }
+        public void ShootEnded()
+        {
+            //enemy.anim.SetTrigger("shoot");
+            if( shotsFired >= 8 )
+            {
+                enemy.anim.SetBool("shoot",false);
+                shotsFired = 0;
+                sm.ChangeState(enemy.idleState);
+
+
+            }
+
+
+        }
+
 
         public override void LogicUpdate()
         {
@@ -46,6 +77,8 @@ namespace Hitler
             Quaternion targetRotation;
             targetRotation = Quaternion.LookRotation(enemy.lookAtTarget.transform.position - enemy.transform.position);
             enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, targetRotation, 5 * turnSpeed * Time.deltaTime);
+
+
 
             /*
 
@@ -71,5 +104,6 @@ namespace Hitler
         {
             base.PhysicsUpdate();
         }
+
     }
 }

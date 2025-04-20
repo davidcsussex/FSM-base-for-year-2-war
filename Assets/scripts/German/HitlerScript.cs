@@ -5,15 +5,29 @@ using UnityEngine.AI;
 
 namespace Hitler
 {
+ 
+    //use an enum for each animation event instead of multiple methods - these enums can be configured in the inspector
+    public enum EnemyAnimEvents
+    {
+        ShootStart,
+        ShootEnd
+    }
+
     public class HitlerScript : MonoBehaviour
     {
+
+
         public Animator anim;
 
+        //prefabs
+        public GameObject bulletPrefab;
         public GameObject grenadePrefab;
         public GameObject dummyGrenade;
         public GameObject handGrenade;  // grenade attached to model
         public GameObject pistol;  // pistol attached to model
         public GameObject throwPoint;
+        public GameObject shootPoint;
+
 
         [HideInInspector]
         public GameObject lookAtTarget;
@@ -28,9 +42,13 @@ namespace Hitler
         public LayerMask groundLayer;
 
 
+        public bool shootAnimationEnded;
+
 
         public float speed;
 
+
+        //states
         public IdleState idleState;
         public ChaseState chaseState;
         public ThrowState throwState;
@@ -78,7 +96,7 @@ namespace Hitler
         {
             GUIScript.gui.text = "hello2\n";
 
-            //UI_Text1.Debug("Enemy State=" + sm.GetState());
+            GUIScript.gui.text = "Enemy State=" + sm.GetState();
 
             sm.CurrentState.HandleInput();
             sm.CurrentState.LogicUpdate();
@@ -167,6 +185,7 @@ namespace Hitler
             yield return null;
         }
 
+
         public void DoThrow()
         {
             // point at which to throw spawned grenade
@@ -218,6 +237,25 @@ namespace Hitler
             }
 
             return hasHit;
+
+        }
+
+        
+        //add a generic method to animation event and set enum for method in inspector
+        public void AnimationEvent( EnemyAnimEvents testParam )
+        {
+            switch(testParam)
+            {
+                case EnemyAnimEvents.ShootStart:
+                    shootState.ShootStart();
+                    break;
+
+                case EnemyAnimEvents.ShootEnd:
+                    shootState.ShootEnded();
+                    break;
+
+
+            }
 
         }
     }
