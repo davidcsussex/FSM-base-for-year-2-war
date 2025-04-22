@@ -22,7 +22,6 @@ namespace Hitler
         //prefabs
         public GameObject bulletPrefab;
         public GameObject grenadePrefab;
-        public GameObject dummyGrenade;
         public GameObject handGrenade;  // grenade attached to model
         public GameObject pistol;  // pistol attached to model
         public GameObject throwPoint;
@@ -100,49 +99,15 @@ namespace Hitler
 
             sm.CurrentState.HandleInput();
             sm.CurrentState.LogicUpdate();
-
-
-
-            /*
-            anim.SetBool("walk", false);
-            anim.SetBool("shakefist", false);
-            anim.SetBool("run", false);
-            if (Input.GetKey("x"))
-            {
-                anim.SetBool("walk", true);
-                agent.destination = lookAtTarget.transform.position; 
-
-            }
-
-            if (Input.GetKey("f"))
-            {
-                anim.SetBool("shakefist", true);
-
-            }
-
-            if (Input.GetKeyDown("t"))
-            {
-                StartCoroutine("ThrowGrenade");
-
-
-            }
-
-
-            if (Input.GetKey("r"))
-            {
-                anim.SetBool("run", true);
-
-            }
-            */
         }
 
 
+
+        /*
         IEnumerator ThrowGrenade()
         {
             Quaternion targetRotation;
             bool doLook = true;
-
-            //dummyGrenade.SetActive(false);
 
 
             while ( doLook==true )
@@ -184,6 +149,7 @@ namespace Hitler
 
             yield return null;
         }
+        */
 
 
         public void DoThrow()
@@ -200,21 +166,11 @@ namespace Hitler
             rb.linearVelocity = (transform.forward * 6) + (transform.up * 4);
             spawnedObject.transform.parent = null;
 
-            //handGrenade.SetActive(false);
-
-
-        }
-
-        public void PickupGrenade()
-        {
-            //disable grenade on ground
-            //enable grenade in hand
-            //dummyGrenade.SetActive(false);
             //handGrenade.SetActive(true);
 
 
-
         }
+
 
         public void EnableGrenadeInHand()
         {

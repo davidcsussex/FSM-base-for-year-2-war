@@ -127,8 +127,9 @@ namespace Hitler
                     targetSet = false;
                     recheckTime = 1;
 
-                    //enemy.sm.ChangeState(enemy.throwState);
-                    enemy.sm.ChangeState(enemy.shootState);
+
+                    enemy.sm.ChangeState(enemy.throwState);
+                    //enemy.sm.ChangeState(enemy.shootState);
                 }
             }
 

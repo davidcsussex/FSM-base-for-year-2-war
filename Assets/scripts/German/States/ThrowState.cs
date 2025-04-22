@@ -1,5 +1,12 @@
 
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+using static UnityEngine.RuleTile.TilingRuleOutput;
+using Unity.IO.LowLevel.Unsafe;
+
 namespace Hitler
 {
     public class ThrowState : State
@@ -18,25 +25,14 @@ namespace Hitler
             Debug.Log("Started throw");
 
 
-            enemy.StartCoroutine("ThrowGrenade");
+            enemy.StartCoroutine(ThrowGrenade());
+            //enemy.StartCoroutine(TestCo());
+
 
             enemy.agent.enabled=false;
             enemy.rb.isKinematic=false;  // disable rb
-
-
-            //enemy.dummyGrenade.SetActive(true);
             enemy.handGrenade.SetActive(true);
 
-            //enemy.agent.destination = enemy.lookAtTarget.transform.position; 
-
-            //player.vel.x = player.vel.z = 0;
-            //player.PlayAnim("arthur_stand", 0, 0);
-            //player.xv = player.yv = 0;
-
-            //player.anim.SetBool("jump", false);
-            //player.anim.SetBool("run", false);
-            //player.anim.SetBool("idle", true);
-            //player.PlayAnim("idle_01");
 
         }
 
@@ -57,43 +53,59 @@ namespace Hitler
         public override void LogicUpdate()
         {
             base.LogicUpdate();
-
-
-            // get distance between enemy and player. If in range change state to throw
-
-            //UIscript.ui.DrawText("standing");
-
-            //player.MovePlayer();
-
-            
-            //player.CheckForFall();
-            //player.CheckForRun();
-            /*
-            if( player.CheckForLanding() == true )
-            {
-                player.vel.y = -0.5f;
-            }
-
-            player.CheckForJump();
-            //player.CheckForShoot();
-            
-
-
-
-
-            //player.CheckForCrouch();
-            //player.CheckForLadderClimb();   // climbing ladder overrides crouch
-            player.UpdateCC();
-*/
-            
-            
         }
 
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
+        }
 
-            //player.CheckForLand();
+        IEnumerator ThrowGrenade()
+        {
+            Quaternion targetRotation;
+            bool doLook = true;
+
+
+            while (doLook == true)
+            {
+                targetRotation = Quaternion.LookRotation(enemy.lookAtTarget.transform.position - enemy.transform.position);
+                enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, targetRotation, 5 * enemy.speed * Time.deltaTime);
+
+
+                //get angle between enemy and player. If >0.9999 then enemy is looking at player
+                Vector3 dir = (enemy.lookAtTarget.transform.position - enemy.transform.position).normalized;
+                float dot = Vector3.Dot(dir, enemy.transform.forward);
+
+                if (dot > 0.995f)
+                {
+                    doLook = false;
+                    //print("dot look=" + dot);
+                }
+                yield return null;
+            }
+            // Smoothly rotate towards the target point.
+
+
+            //anim.SetTrigger("throw");
+            enemy.anim.SetTrigger("throw");
+
+
+            yield return new WaitForSeconds(0.5f);
+
+            enemy.anim.ResetTrigger("throw");
+
+            enemy.handGrenade.SetActive(false);
+
+            yield return new WaitForSeconds(1.5f);
+
+            sm.ChangeState(enemy.idleState);
+
+
+
+
+            yield return null;
+
+
         }
     }
 }

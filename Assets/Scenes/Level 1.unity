@@ -282,7 +282,6 @@ MonoBehaviour:
   anim: {fileID: 0}
   bulletPrefab: {fileID: 6784047565348127184, guid: 3b0d378735db34541bd2b46531464b5f, type: 3}
   grenadePrefab: {fileID: 9208846938241445817, guid: 93a9bd394b274bc429aefc325c31851c, type: 3}
-  dummyGrenade: {fileID: 9208846936446466188}
   handGrenade: {fileID: 9208846937434973142}
   pistol: {fileID: 1008252808}
   throwPoint: {fileID: 1840746699}
@@ -291,7 +290,7 @@ MonoBehaviour:
   sm: {fileID: 0}
   agent: {fileID: 0}
   testSphere: {fileID: 2024375960}
-  navCheckSphere: {fileID: 1230417741}
+  navCheckSphere: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 0
@@ -4369,7 +4368,7 @@ Transform:
   m_GameObject: {fileID: 868316138}
   serializedVersion: 2
   m_LocalRotation: {x: 0.04601549, y: 0.8872537, z: -0.061859824, w: 0.45479313}
-  m_LocalPosition: {x: 0.0017, y: 0.0666, z: 0.279}
+  m_LocalPosition: {x: -0.0037, y: 0.0661, z: 0.2542}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5047,14 +5046,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1008252808}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4530726, y: -0.3100194, z: 0.67135286, w: -0.4978941}
+  m_LocalRotation: {x: 0.46368435, y: -0.29977784, z: 0.6638532, w: -0.50440955}
   m_LocalPosition: {x: 10.5, y: 6.8, z: -1.1}
   m_LocalScale: {x: 90.90908, y: 90.90911, z: 90.90907}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 868316139}
   m_Father: {fileID: 1588491081}
-  m_LocalEulerAnglesHint: {x: -2, y: -293.42, z: -108.19}
+  m_LocalEulerAnglesHint: {x: -4, y: -293.03, z: -108.19}
 --- !u!4 &1009958075 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4018235550319848, guid: 90220df93a6a8424681002d21b823e20, type: 3}
@@ -8613,7 +8612,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7862949450632462172, guid: 82e3485efd480ea429e0990f6dcf6635, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5412116889482337075, guid: 82e3485efd480ea429e0990f6dcf6635, type: 3}
@@ -12996,7 +12996,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &9209643531132327278
 GameObject:
   m_ObjectHideFlags: 0
