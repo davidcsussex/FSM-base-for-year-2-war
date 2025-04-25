@@ -128,8 +128,14 @@ namespace Hitler
                     recheckTime = 1;
 
 
-                    enemy.sm.ChangeState(enemy.throwState);
-                    //enemy.sm.ChangeState(enemy.shootState);
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        enemy.sm.ChangeState(enemy.throwState);
+                    }
+                    else
+                    {
+                        enemy.sm.ChangeState(enemy.shootState);
+                    }
                 }
             }
 

@@ -48,7 +48,7 @@ namespace Hitler
         {
             Debug.Log("doshoot!!!");
             GameObject bullet= GameObject.Instantiate(enemy.bulletPrefab,enemy.shootPoint.transform.position,enemy.pistol.transform.rotation);
-            bullet.GetComponent<Rigidbody>().linearVelocity = bullet.transform.forward * 10;
+            bullet.GetComponent<Rigidbody>().linearVelocity = bullet.transform.forward * 0.0001f;
             bullet.transform.rotation = enemy.pistol.transform.rotation;
             shotsFired++;
 

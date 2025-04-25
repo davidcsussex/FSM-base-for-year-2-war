@@ -8,9 +8,17 @@ using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
 using UnityEngine.AI;
 using NUnit.Framework;
+using Hitler;
 
 namespace Player
 {
+
+    public enum PlayerAnimEvents
+    {
+        ShootStart,
+        CanReshoot,
+        ShootEnded
+    }
 
 
     public class PlayerScript : MonoBehaviour
@@ -30,11 +38,18 @@ namespace Player
         [HideInInspector]
         public GameObject vehicle;
 
+        public Transform shootPoint;
+        public Transform flameThrowershootPoint;
         public GameObject hat;  // link to hat attached to model
         public GameObject hatPrefab;    //new prefab hat spawned onto player when hit
         bool grenadeHit = false;// true if grenade has hit player
         Transform hatTransformParent;
         Vector3 hatTransformPosition;
+
+
+        public GameObject bulletPrefab;
+        public GameObject flameThrowerFX;
+        public GameObject gun;
 
 
         public CapsuleCollider collider1;
@@ -45,6 +60,8 @@ namespace Player
         public WalkingState walkingState;
         public DrivingState drivingState;
         public EnterCarState enterCarState;
+        public ShootingState shootingState;
+
         public DelayState delayState;
 
         bool isGrounded;
@@ -78,7 +95,7 @@ namespace Player
             walkingState = new WalkingState(this, sm);
             drivingState = new DrivingState(this, sm);
             enterCarState = new EnterCarState(this, sm);
-
+            shootingState = new ShootingState(this, sm);
             collider1 = GetComponent<CapsuleCollider>();
 
             // initialise the statemachine with the default state
@@ -304,6 +321,51 @@ namespace Player
             hat.SetActive(true);
             grenadeHit = false;
             yield return null;
+        }
+
+        public bool ShootButtonPressed()
+        {
+            if (Input.GetButtonDown("Fire3"))
+            {
+                return true;
+            }
+            return false;
+
+        }
+        public bool ShootButtonHeld()
+        {
+            if (Input.GetButton("Fire3"))
+            {
+                return true;
+            }
+            return false;
+
+        }
+
+
+
+
+        //generic script added to all animation events
+        public void AnimationEvent(PlayerAnimEvents testParam)
+        {
+            switch (testParam)
+            {
+                case PlayerAnimEvents.ShootStart:
+                    shootingState.ShootStart();
+                    break;
+
+                case PlayerAnimEvents.CanReshoot:
+                    shootingState.CanReshoot();
+                    break;
+
+
+                case PlayerAnimEvents.ShootEnded:
+                    shootingState.ShootEnded();
+                    break;
+
+
+            }
+
         }
 
     }

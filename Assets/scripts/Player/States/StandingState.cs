@@ -36,6 +36,11 @@ namespace Player
                 sm.ChangeState(player.walkingState);
             }
 
+            if(player.ShootButtonPressed() )
+            {
+                sm.ChangeState(player.shootingState);
+            }
+
         }
 
         public override void PhysicsUpdate()
