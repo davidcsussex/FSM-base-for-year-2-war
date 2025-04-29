@@ -14,7 +14,6 @@ namespace Player
         float currentAngle;
         float currentAngleVelocity;
         bool canShoot;
-
         bool flameThrower;
 
         // constructor
@@ -50,7 +49,7 @@ namespace Player
 
             player.anim.SetBool("Shoot", false);
             player.anim.SetBool("Flame", false);
-            player.flameThrowerFX.SetActive(false);
+            //player.flameThrowerFX.SetActive(false);
 
         }
 
@@ -126,7 +125,7 @@ namespace Player
             if( flameThrower )
             {
                 //enable flame
-                player.flameThrowerFX.SetActive(true);
+                GameObject.Instantiate(player.flameThrowerFXPrefab, player.shootPoint.transform.position, player.transform.rotation);
 
             }
             else

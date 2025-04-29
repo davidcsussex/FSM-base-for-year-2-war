@@ -48,7 +48,7 @@ namespace Player
 
 
         public GameObject bulletPrefab;
-        public GameObject flameThrowerFX;
+        public GameObject flameThrowerFXPrefab;
         public GameObject gun;
 
 
@@ -362,7 +362,6 @@ namespace Player
                 case PlayerAnimEvents.ShootEnded:
                     shootingState.ShootEnded();
                     break;
-
 
             }
 
