@@ -14,7 +14,6 @@ namespace Player
         float currentAngle;
         float currentAngleVelocity;
         bool canShoot;
-        bool flameThrower;
 
         // constructor
         public ShootingState(PlayerScript player, StateMachine sm) : base(player, sm)
@@ -28,14 +27,11 @@ namespace Player
             //Debug.Log("start walking");
             canShoot = false;
 
-            flameThrower = true;
 
 
-            if (flameThrower)
+            if (player.weaponType == WeaponTypes.Flame)
             {
-                player.gun.SetActive(false);
                 player.anim.SetBool("Flame", true);
-
             }
             else
             {
@@ -80,13 +76,13 @@ namespace Player
 
         void CheckForShoot()
         {
-            if( flameThrower)
+            if( player.weaponType == WeaponTypes.Flame)
             {
 
                 if( player.ShootButtonHeld()==false )
                 {
                     player.anim.SetBool("Flame", false);
-
+                    sm.ChangeState(player.standingState);
                 }
                 else
                 {
@@ -99,7 +95,7 @@ namespace Player
             {
                 canShoot = false;
 
-                if( flameThrower)
+                if(player.weaponType == WeaponTypes.Flame)
                 {
                     player.anim.SetBool("Flame", true);
 
@@ -122,20 +118,26 @@ namespace Player
 
         public void ShootStart()
         {
-            if( flameThrower )
+            Debug.Log("do flame shoot start");
+
+            if( player.weaponType == WeaponTypes.Flame )
             {
                 //enable flame
-                GameObject.Instantiate(player.flameThrowerFXPrefab, player.shootPoint.transform.position, player.transform.rotation);
+                GameObject obj = GameObject.Instantiate(player.flameThrowerFXPrefab, player.flameThrowerShootPoint.transform.position, player.transform.rotation);
 
             }
             else
             {
                 canShoot = false; //player can't fire again yet
 
-                GameObject bullet = GameObject.Instantiate(player.bulletPrefab, player.shootPoint.position, player.shootPoint.transform.rotation);
-
-                bullet.GetComponent<Rigidbody>().linearVelocity = bullet.transform.forward * 10;
-                bullet.transform.rotation = player.shootPoint.transform.rotation;
+                // don't spawn bullet if player is transitioning from idle as it will fire a bullet into the ground
+                if (player.anim.GetCurrentAnimatorStateInfo(0).IsName("shoot") == true)
+                {
+                    GameObject bullet = GameObject.Instantiate(player.bulletPrefab, player.shootPoint.position, player.shootPoint.transform.rotation);
+                    bullet.GetComponent<Rigidbody>().linearVelocity = bullet.transform.forward * 10;
+                    bullet.transform.rotation = player.shootPoint.transform.rotation;
+                }
+                
 
             }
 

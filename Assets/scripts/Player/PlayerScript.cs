@@ -1,14 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.VFX;
-using UnityEngine.InputSystem;
-using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
 using UnityEngine.AI;
-using NUnit.Framework;
-using Hitler;
 
 namespace Player
 {
@@ -20,6 +13,11 @@ namespace Player
         ShootEnded
     }
 
+    public enum WeaponTypes
+    {
+        Gun,
+        Flame
+    }
 
     public class PlayerScript : MonoBehaviour
     {
@@ -39,7 +37,7 @@ namespace Player
         public GameObject vehicle;
 
         public Transform shootPoint;
-        public Transform flameThrowershootPoint;
+        public Transform flameThrowerShootPoint;
         public GameObject hat;  // link to hat attached to model
         public GameObject hatPrefab;    //new prefab hat spawned onto player when hit
         bool grenadeHit = false;// true if grenade has hit player
@@ -49,7 +47,10 @@ namespace Player
 
         public GameObject bulletPrefab;
         public GameObject flameThrowerFXPrefab;
-        public GameObject gun;
+        
+        
+        public GameObject flameThrowerWeapon;
+        public GameObject gunWeapon;
 
 
         public CapsuleCollider collider1;
@@ -68,6 +69,13 @@ namespace Player
         public bool isTouchingVehicle;
 
 
+        public Vector3 velocity;
+        public float gravity = -18;
+        float currentAngle;
+        float currentAngleVelocity;
+        Vector3 moveDir;
+
+
         public float moveSpeed = 100;
         public float drivingForce = 4000;
         public float walkSpeed = 10f;
@@ -76,6 +84,10 @@ namespace Player
         public Camera cam;
         public CharacterController cc;
         public float rotationSmoothTime;
+
+        public WeaponTypes weaponType;
+        public GameObject uiGun;
+        public GameObject uiFlameThrower;
 
 
         // Start is called before the first frame update
@@ -106,13 +118,18 @@ namespace Player
             //initialise variables
             isGrounded = false;
             isTouchingVehicle = false;
+
+            weaponType = WeaponTypes.Gun;
         }
 
         // Update is called once per frame
         public void Update()
         {
+            GUIScript.gui.text = "Player State=" + sm.GetState();
+
             sm.CurrentState.HandleInput();
             sm.CurrentState.LogicUpdate();
+            SwapWeapon();
             SetDebugSpeed();
 
             if( Input.GetButtonDown("Fire1"))
@@ -142,6 +159,9 @@ namespace Player
         {
 
             sm.CurrentState.LateUpdate();
+
+            DoRun();
+
         }
 
         void FixedUpdate()
@@ -364,6 +384,116 @@ namespace Player
                     break;
 
             }
+
+        }
+
+        void SwapWeapon()
+        {
+            if (weaponType == WeaponTypes.Gun)
+            {
+                gunWeapon.SetActive(true);
+                flameThrowerWeapon.SetActive(false);
+                uiGun.SetActive(true);
+                uiFlameThrower.SetActive(false);
+
+            }
+            else
+            {
+                gunWeapon.SetActive(false);
+                flameThrowerWeapon.SetActive(true);
+                uiGun.SetActive(false);
+                uiFlameThrower.SetActive(true);
+
+            }
+
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (weaponType == WeaponTypes.Gun)
+                {
+                    weaponType = WeaponTypes.Flame;
+                }
+                else
+                {
+                    weaponType = WeaponTypes.Gun;
+
+                }
+            }
+        }
+
+        public void ApplyGravity()
+        {
+
+           
+        }
+
+
+        public void DoRun()
+        {
+            /*
+            player.rb.AddForce(mov * player.moveSpeed);
+            player.rb.velocity = Vector3.ClampMagnitude(player.rb.velocity, 1.5f);
+
+            // rotate to direction of movement
+            var newRotation = Quaternion.LookRotation(mov).eulerAngles;
+            newRotation.x = 0;
+            newRotation.z = 0;
+            player.transform.rotation = Quaternion.Slerp(player.transform.rotation, Quaternion.Euler(newRotation), Time.fixedDeltaTime * 10);
+
+            //sm.transform.rotation = Quaternion.LookRotation( mov );
+            */
+
+            //capturing Input from Player
+
+            float targetAngle=0;
+
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+            //Debug.Log("hm=" + hMov);
+
+            Vector3 direction = new Vector3(h, 0, v).normalized;
+
+            if (direction.magnitude >= 0.1f)
+            {
+
+                targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
+                currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, rotationSmoothTime);
+
+                moveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward * 0.2f;
+
+
+
+                //transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+
+                if (direction.magnitude >= 0.1f)
+                {
+                    transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+                }
+                else
+                {
+
+                    moveDir = Vector3.zero;
+                }
+            }
+            else
+            {
+                moveDir = Vector3.zero;
+
+            }
+
+            velocity.y += gravity * Time.deltaTime;
+            if (cc.isGrounded)
+            {
+                velocity.y = -3;
+            }
+
+
+            cc.Move((moveDir * walkSpeed + velocity) * Time.deltaTime);
+
+
+            print("current angle=" + currentAngle);
+            print("target angle=" + targetAngle);
+            print("direction=" + direction);
 
         }
 
