@@ -48,7 +48,7 @@ namespace Hitler
         {
             Debug.Log("doshoot!!!");
             GameObject bullet= GameObject.Instantiate(enemy.bulletPrefab,enemy.shootPoint.transform.position,enemy.pistol.transform.rotation);
-            bullet.GetComponent<Rigidbody>().linearVelocity = bullet.transform.forward * 0.0001f;
+            bullet.GetComponent<Rigidbody>().linearVelocity = bullet.transform.forward * 10.0001f;
             bullet.transform.rotation = enemy.pistol.transform.rotation;
             shotsFired++;
 
@@ -73,6 +73,9 @@ namespace Hitler
         public override void LogicUpdate()
         {
             base.LogicUpdate();
+            enemy.CheckForDeath();
+
+
             float turnSpeed = 3;
             Quaternion targetRotation;
             targetRotation = Quaternion.LookRotation(enemy.lookAtTarget.transform.position - enemy.transform.position);

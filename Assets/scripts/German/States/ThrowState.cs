@@ -53,6 +53,9 @@ namespace Hitler
         public override void LogicUpdate()
         {
             base.LogicUpdate();
+
+            enemy.CheckForDeath();
+
         }
 
         public override void PhysicsUpdate()

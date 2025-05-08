@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 19801364}
   - component: {fileID: 19998858}
   - component: {fileID: 48120466916505270}
+  - component: {fileID: 4624746289798038749}
   m_Layer: 0
   m_Name: FlameThrower_FX
   m_TagString: Untagged
@@ -3624,9 +3625,9 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
-    type: 0
+    type: 1
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
@@ -3803,11 +3804,11 @@ ParticleSystem:
     radiusScale: 1
     collidesWith:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 512
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 1
   TriggerModule:
@@ -4862,4 +4863,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f826225fdd70cab4fbb4f1d1ecf0f8b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flameEffect: {fileID: 0}
+  burnPrefab: {fileID: 779159461429656985, guid: d6caf2ed86199c04e84a0e6ff368d8c0, type: 3}
+  smokePrefab: {fileID: 0}
+--- !u!65 &4624746289798038749
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182542}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 2.1135342, y: 1.4035931, z: 7.018463}
+  m_Center: {x: -0.13939798, y: 0.20179653, z: 6.8316374}

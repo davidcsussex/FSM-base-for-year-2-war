@@ -70,6 +70,8 @@ namespace Hitler
         public override void LogicUpdate()
         {
             base.LogicUpdate();
+            enemy.CheckForDeath();
+
 
             //OldLogic();
             NewLogic();

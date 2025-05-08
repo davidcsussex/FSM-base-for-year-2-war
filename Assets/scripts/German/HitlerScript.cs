@@ -15,8 +15,6 @@ namespace Hitler
 
     public class HitlerScript : MonoBehaviour
     {
-
-
         public Animator anim;
 
         //prefabs
@@ -26,6 +24,8 @@ namespace Hitler
         public GameObject pistol;  // pistol attached to model
         public GameObject throwPoint;
         public GameObject shootPoint;
+        public GameObject explosionPrefab;
+
 
 
         [HideInInspector]
@@ -37,6 +37,8 @@ namespace Hitler
         public NavMeshAgent agent;
         public GameObject testSphere; //used to show  next target point
         public GameObject navCheckSphere; //used to show  next target point
+
+        public GameObject model;
 
         public LayerMask groundLayer;
 
@@ -52,10 +54,13 @@ namespace Hitler
         public ChaseState chaseState;
         public ThrowState throwState;
         public ShootState shootState;
+        public DyingState dyingState;
         public ShakeFistState shakeFistState;
         public MoveToPointState moveToPointState;
 
         public Rigidbody rb;
+
+        public bool dying;
 
         // Start is called before the first frame update
         void Start()
@@ -64,6 +69,7 @@ namespace Hitler
 
             lookAtTarget = GameObject.FindGameObjectWithTag("Player");
             speed = 3;
+            dying = false;
 
             agent = GetComponent<NavMeshAgent>();
             agent.destination = lookAtTarget.transform.position; 
@@ -77,6 +83,7 @@ namespace Hitler
             shootState = new ShootState(this, sm);
             shakeFistState = new ShakeFistState(this, sm);
             moveToPointState = new MoveToPointState(this, sm);
+            dyingState = new DyingState(this, sm);
 
             rb = GetComponent<Rigidbody>();
 
@@ -213,6 +220,18 @@ namespace Hitler
 
             }
 
+        }
+
+        public void CheckForDeath()
+        {
+            if( dying == true )
+            {
+                sm.ChangeState(dyingState);
+            }
+        }
+        public void RequestDeath()
+        {
+            dying = true;
         }
     }
 }

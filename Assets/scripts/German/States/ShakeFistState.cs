@@ -39,6 +39,9 @@ namespace Hitler
 
         public override void LogicUpdate()
         {
+            enemy.CheckForDeath();
+
+
             base.LogicUpdate();
             float turnSpeed = 3;
             Quaternion targetRotation;

@@ -52,6 +52,8 @@ namespace Hitler
         {
             base.LogicUpdate();
 
+            enemy.CheckForDeath();
+
 
             if (Input.GetKey("x"))
             {

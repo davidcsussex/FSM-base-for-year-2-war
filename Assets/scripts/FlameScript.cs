@@ -1,9 +1,13 @@
+using Hitler;
 using UnityEngine;
 
 public class FlameScript : MonoBehaviour
 {
     ParticleSystem ps;
     Player.PlayerScript playerScript;
+
+    public GameObject burnPrefab;
+    public GameObject smokePrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -36,4 +40,20 @@ public class FlameScript : MonoBehaviour
 
 
     }
+
+    void OnParticleCollision(GameObject other)
+    {
+        print("particle flame has hit " + other.gameObject.name);
+
+        if (other.gameObject.tag == "Enemy")
+        {
+            other.gameObject.GetComponent<HitlerScript>().RequestDeath();   //send signal to enemy to start dying
+            Instantiate(burnPrefab, other.transform);
+
+        }
+
+    }
+
+
+
 }

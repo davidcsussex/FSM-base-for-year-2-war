@@ -491,9 +491,9 @@ namespace Player
             cc.Move((moveDir * walkSpeed + velocity) * Time.deltaTime);
 
 
-            print("current angle=" + currentAngle);
-            print("target angle=" + targetAngle);
-            print("direction=" + direction);
+            //print("current angle=" + currentAngle);
+            //print("target angle=" + targetAngle);
+            //print("direction=" + direction);
 
         }
 
